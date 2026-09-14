@@ -62,7 +62,7 @@ struct MatchFrameSizeUseCase {
             .filter { $0.matchQuality != .notRecommended }
             .sorted { lhs, rhs in
                 if lhs.matchQuality == rhs.matchQuality {
-                    return lhs.frame.priceUSD < rhs.frame.priceUSD
+                    return lhs.frame.priceAUD < rhs.frame.priceAUD
                 }
                 return lhs.matchQuality == .perfect
             }

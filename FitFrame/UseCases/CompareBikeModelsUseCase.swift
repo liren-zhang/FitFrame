@@ -36,7 +36,7 @@ struct CompareBikeModelsUseCase {
         // 按匹配质量分组，优先 perfect
         let sorted = models.sorted { lhs, rhs in
             if lhs.matchQuality == rhs.matchQuality {
-                return lhs.frame.priceUSD < rhs.frame.priceUSD
+                return lhs.frame.priceAUD < rhs.frame.priceAUD
             }
             return lhs.matchQuality == .perfect
         }

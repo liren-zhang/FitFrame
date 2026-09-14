@@ -24,7 +24,7 @@ struct BicycleFrameGeometry: Codable, Equatable, Identifiable {
     let sizeLabel: String         // 尺码标签，例如 "M"
     let stackMM: Double           // Stack（毫米）
     let reachMM: Double           // Reach（毫米）
-    let priceUSD: Double          // 价格（美元）
+    let priceAUD: Double          // 价格（美元）
 
     init(
         id: UUID = UUID(),
@@ -33,7 +33,7 @@ struct BicycleFrameGeometry: Codable, Equatable, Identifiable {
         sizeLabel: String,
         stackMM: Double,
         reachMM: Double,
-        priceUSD: Double
+        priceAUD: Double
     ) {
         self.id = id
         self.brand = brand
@@ -41,6 +41,6 @@ struct BicycleFrameGeometry: Codable, Equatable, Identifiable {
         self.sizeLabel = sizeLabel
         self.stackMM = stackMM
         self.reachMM = reachMM
-        self.priceUSD = priceUSD
+        self.priceAUD = priceAUD
     }
 }
