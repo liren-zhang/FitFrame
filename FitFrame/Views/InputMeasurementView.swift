@@ -9,7 +9,7 @@
 //  InputMeasurementView.swift
 //  FitFrame
 //
-//  输入界面：收集用户 6 项身体数据
+//  Measurement input screen. Collects six body values from the rider.
 //
 
 import SwiftUI
@@ -17,25 +17,51 @@ import SwiftUI
 struct InputMeasurementView: View {
 
     @StateObject private var viewModel = BodyMeasurementViewModel()
-
-    /// 计算完成后是否跳转到结果页
     @State private var showResult = false
 
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Body Measurements (cm)")) {
-                    measurementField("Height", text: $viewModel.heightText)
-                    measurementField("Inseam", text: $viewModel.inseamText)
-                    measurementField("Arm Length", text: $viewModel.armLengthText)
-                    measurementField("Torso Length", text: $viewModel.torsoLengthText)
+
+                // ───── 身体测量 ─────
+                Section(header: Text("Body Measurements")) {
+                    measurementField(
+                        title: "Height",
+                        hint: "Stand barefoot, measure from the top of your head to the floor",
+                        text: $viewModel.heightText
+                    )
+                    measurementField(
+                        title: "Inseam",
+                        hint: "Wearing cycling shorts, measure from the perineum to the floor",
+                        text: $viewModel.inseamText
+                    )
+                    measurementField(
+                        title: "Arm Length",
+                        hint: "Hold a pen in your palm, arm straight, measure from the pen to the top of your shoulder",
+                        text: $viewModel.armLengthText
+                    )
+                    measurementField(
+                        title: "Torso Length",
+                        hint: "Distance from the sternum (bottom of breastbone) to the floor, minus your inseam",
+                        text: $viewModel.torsoLengthText
+                    )
                 }
 
+                // ───── 体能评估 ─────
                 Section(header: Text("Physical Assessment")) {
-                    scorePicker("Flexibility", score: $viewModel.flexibilityScore)
-                    scorePicker("Core Strength", score: $viewModel.coreStrengthScore)
+                    scoreField(
+                        title: "Flexibility",
+                        legend: "Standing forward bend — 5: palms on floor · 4: fingertips within 10 cm · 3: 10–20 cm · 2: 20–30 cm · 1: over 30 cm",
+                        score: $viewModel.flexibilityScore
+                    )
+                    scoreField(
+                        title: "Core Strength",
+                        legend: "Plank hold — 5: over 120 s · 4: 90–119 s · 3: 60–89 s · 2: 30–59 s · 1: under 30 s",
+                        score: $viewModel.coreStrengthScore
+                    )
                 }
 
+                // ───── 操作按钮 ─────
                 Section {
                     Button(action: {
                         viewModel.calculate()
@@ -54,6 +80,7 @@ struct InputMeasurementView: View {
                     }
                 }
 
+                // ───── 错误提示 ─────
                 if let error = viewModel.errorMessage {
                     Section {
                         Text(error)
@@ -74,23 +101,28 @@ struct InputMeasurementView: View {
 
     // MARK: - 子视图
 
-    /// 测量输入框
-    private func measurementField(_ title: String, text: Binding<String>) -> some View {
-        HStack {
-            Text(title)
-            Spacer()
-            TextField("0", text: text)
-                .keyboardType(.decimalPad)
-                .multilineTextAlignment(.trailing)
-                .frame(width: 100)
-            Text("cm")
+    /// 带说明文字的数字输入行
+    private func measurementField(title: String, hint: String, text: Binding<String>) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(title)
+                Spacer()
+                TextField("0", text: text)
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 90)
+                Text("cm")
+                    .foregroundColor(.secondary)
+            }
+            Text(hint)
+                .font(.caption2)
                 .foregroundColor(.secondary)
         }
     }
 
-    /// 1–5 分滑块
-    private func scorePicker(_ title: String, score: Binding<Int>) -> some View {
-        VStack(alignment: .leading) {
+    /// 带评分标准的滑块行
+    private func scoreField(title: String, legend: String, score: Binding<Int>) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(title)
                 Spacer()
@@ -105,6 +137,9 @@ struct InputMeasurementView: View {
                 in: 1...5,
                 step: 1
             )
+            Text(legend)
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
     }
 
@@ -118,7 +153,7 @@ struct InputMeasurementView: View {
         }
     }
 
-    /// 从输入构造领域模型
+    /// 从输入框构造领域模型
     private func buildMeasurements() -> CyclistBodyMeasurements? {
         guard let h = Double(viewModel.heightText),
               let i = Double(viewModel.inseamText),
