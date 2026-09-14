@@ -53,7 +53,7 @@ struct BikeMatchView: View {
     }
 }
 
-/// 列表中的一行
+
 struct BikeMatchRow: View {
 
     let model: BikeModel
