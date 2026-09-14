@@ -14,8 +14,19 @@
 
 import Foundation
 
-/// 骑手的身体测量数据
-/// 业务规则：所有测量值必须为正数，且胯高必须小于身高
+/// The set of body measurements a cyclist provides to FitFrame.
+///
+/// These six values are the minimum input required to calculate a rider's
+/// target Stack and Reach. They are collected directly from the user through
+/// the measurement input screen.
+///
+/// ### Business Rules
+/// - All measurements must be positive numbers.
+/// - The inseam must be smaller than the rider's height.
+/// - Both assessment scores must be between 1 and 5.
+///
+/// - Note: Values are stored in centimeters (cm), except for the two
+///   assessment scores, which are integers from 1 to 5.
 struct CyclistBodyMeasurements: Codable, Equatable {
     let heightCM: Double          // 身高（厘米）
     let inseamCM: Double          // 胯高（会阴到地面）

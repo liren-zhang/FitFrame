@@ -14,9 +14,21 @@
 
 import Foundation
 
-/// 一款车架的几何参数
-/// Stack = 五通到车头管顶部的垂直距离
-/// Reach = 五通到车头管顶部的水平距离
+/// Represents a single frame size of a road bicycle model.
+///
+/// A frame is defined by two geometric values:
+/// - **Stack**: the vertical distance from the bottom bracket to the top of
+///   the head tube, in millimeters.
+/// - **Reach**: the horizontal distance from the bottom bracket to the top of
+///   the head tube, in millimeters.
+///
+/// These values determine whether a frame fits a rider. Two riders of the
+/// same height may require different frame sizes because of differences in
+/// leg and torso proportions.
+///
+/// - Note: Prices are in Australian Dollars (AUD).
+
+/// The riding category a bicycle frame is designed for.
 struct BicycleFrameGeometry: Codable, Equatable, Identifiable {
     let id: UUID
     let brand: String             // 品牌，例如 "Canyon"

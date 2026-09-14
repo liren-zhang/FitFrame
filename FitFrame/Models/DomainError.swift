@@ -14,14 +14,28 @@
 //
 
 import Foundation
-
+/// Errors that can occur during a bike sizing operation.
+///
+/// Every error case corresponds to a situation a real cyclist could encounter
+/// while using the app. The `errorDescription` for each case is written in
+/// domain language so that it can be shown directly to the user, not just to
+/// a developer.
+///
+/// - `invalidMeasurement`: One of the body measurements is missing or not a
+///   positive number.
+/// - `implausibleProportions`: The measurements are internally inconsistent,
+///   such as an inseam longer than 60% of the rider's height.
+/// - `noMatchingFrameFound`: No frame in the repository falls within the
+///   acceptable tolerance of the rider's target geometry.
+/// - `insufficientMeasurements`: Not enough data was provided to perform the
+///   requested operation.
 enum DomainError: LocalizedError {
     case invalidMeasurement(field: String)           // 某项测量值无效
     case implausibleProportions(reason: String)      // 比例不合理
     case noMatchingFrameFound                        // 找不到匹配车架
     case insufficientMeasurements                    // 数据不完整
 
-    /// 面向用户的错误描述（领域语言）
+
     var errorDescription: String? {
         switch self {
         case .invalidMeasurement(let field):

@@ -14,18 +14,31 @@
 
 import Foundation
 
-/// 对比结果
+/// The result of comparing two or three bicycle frames.
+///
+/// Contains the recommended frame, a short reason written for the user, and a
+/// list of the remaining frames as alternatives.
 struct ComparisonResult: Equatable {
     let recommended: BicycleFrameGeometry   // 推荐的车架
     let reason: String                       // 推荐理由（面向用户）
     let alternatives: [BicycleFrameGeometry] // 备选
 }
 
-/// Use Case：对比 2–3 款车架
-/// 业务规则：
-/// 1. 优先选择匹配质量最高的
-/// 2. 质量相同时，选择价格更低的
-/// 3. 必须对比至少 2 款车架
+/// Compares two or three shortlisted frames and selects the best option for
+/// the rider.
+///
+/// ### Business Rules
+/// 1. At least two frames must be provided. Comparing a single frame is not a
+///    meaningful operation.
+/// 2. The frame with the highest match quality is preferred.
+/// 3. When two frames have the same match quality, the lower-priced frame is
+///    recommended. This rule directly addresses the needs of budget-conscious
+///    riders who want the best value among equally suitable options.
+///
+/// - Throws: `DomainError.insufficientMeasurements` if fewer than two frames
+///   are provided.
+/// - Throws: `DomainError.noMatchingFrameFound` if the list of models is
+///   empty after sorting.
 struct CompareBikeModelsUseCase {
 
     func execute(models: [BikeModel]) throws -> ComparisonResult {

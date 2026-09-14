@@ -14,7 +14,11 @@
 
 import Foundation
 
-/// 骑行姿势等级（由柔韧度和核心力量总分决定）
+/// The riding posture derived from a rider's flexibility and core strength.
+///
+/// - `relaxed`: total score 2–4, suited to riders who prefer an upright position.
+/// - `neutral`: total score 5–7, a balanced position suitable for most riders.
+/// - `aggressive`: total score 8–10, a low and aerodynamic position.
 enum RidingPosture {
     case relaxed      // 休闲：2–4 分
     case neutral      // 中立：5–7 分
@@ -39,11 +43,22 @@ enum RidingPosture {
     }
 }
 
-/// Use Case：计算目标 Stack 与 Reach
-/// 业务规则：
-/// 1. 柔韧度 + 核心力量总分决定骑行姿势
-/// 2. Stack = 0.69 × 胯高 + 校正值（cm）
-/// 3. Reach = (躯干长 + 臂长) × 姿势参数 − 坐高 × 0.29 + 100 − 204（mm）
+/// Calculates a rider's target Stack and Reach from their body measurements.
+///
+/// ### Business Rules
+/// 1. The rider's posture preference (relaxed, neutral, or aggressive) is
+///    derived from the sum of their flexibility and core strength scores.
+/// 2. Stack is calculated as `0.69 × inseam + posture correction`, where the
+///    correction is +3 cm (relaxed), 0 cm (neutral), or −2 cm (aggressive).
+/// 3. Reach is calculated as
+///    `(torso + arm) × posture factor − saddle height × 0.29 + 100 − 204`,
+///    where the posture factor is 0.52 (relaxed), 0.535 (neutral), or 0.545
+///    (aggressive).
+///
+/// - Throws: `DomainError.invalidMeasurement` if any measurement is missing
+///   or not a positive number.
+/// - Throws: `DomainError.implausibleProportions` if the inseam is more than
+///   60% of the rider's height.
 struct CalculateStackReachUseCase {
 
     /// 执行计算

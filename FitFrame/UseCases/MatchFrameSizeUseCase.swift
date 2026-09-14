@@ -14,11 +14,21 @@
 
 import Foundation
 
-/// Use Case：匹配车架尺寸
-/// 业务规则：
-/// 1. 车架 Stack/Reach 与目标值的差异在 ±5mm 内 → 完美匹配
-/// 2. 差异在 ±15mm 内 → 接近
-/// 3. 差异超过 ±15mm → 不推荐
+/// Matches a rider's target Stack and Reach against the available frames in
+/// the repository.
+///
+/// ### Business Rules
+/// - A frame is a **perfect match** if both its Stack and Reach are within
+///   ±5 mm of the rider's target values.
+/// - A frame is a **close match** if both are within ±15 mm but not within
+///   ±5 mm.
+/// - Frames outside ±15 mm are excluded from the results.
+/// - When multiple frames have the same match quality, the cheaper frame is
+///   ranked first, so that budget-conscious riders see the best-value option
+///   at the top of the list.
+///
+/// - Throws: `DomainError.noMatchingFrameFound` if the input list is empty or
+///   if no frame falls within the acceptable tolerance.
 struct MatchFrameSizeUseCase {
 
     private let perfectToleranceMM: Double = 5
