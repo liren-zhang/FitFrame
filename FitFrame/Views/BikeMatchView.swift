@@ -67,10 +67,6 @@ struct BikeMatchRow: View {
                 Text(model.displayName)
                     .font(.headline)
 
-                Text(model.frame.category.rawValue)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
                 HStack(spacing: 12) {
                     Text("Stack \(Int(model.frame.stackMM))mm")
                     Text("Reach \(Int(model.frame.reachMM))mm")
